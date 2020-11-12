@@ -4,6 +4,7 @@ import datetime
 import secrets
 log = logging.getLogger("session_manager")
 import math
+from ntx import *
 
 NEWS_SCORE_PROVIDER_PRICE = 2
 ATHENE_PROVIDER_PRICE = 13

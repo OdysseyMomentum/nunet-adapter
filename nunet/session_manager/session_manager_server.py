@@ -57,9 +57,9 @@ class Tag:
     ATHENE_STAT = "athene_stat"
     NEWS_SCORE_STAT = "news_score_stat"
 
-    UCLNLP_PROVIDER = "Device 1"
-    ATHENE_PROVIDER = "Device 2"
-    NEWS_SCORE_PROVIDER = "Device 3"
+    UCLNLP_PROVIDER = "uclnlp"
+    ATHENE_PROVIDER = "athene"
+    NEWS_SCORE_PROVIDER = "news_score"
 
     UCLNLP_PUBK="0xb5114121A51c6FfA04dBC73F26eDb7B6bfE2eB35"
     ATHENE_PUBK="0xb5114121A51c6FfA04dBC73F26eDb7B6bfE2eB35"
@@ -277,6 +277,25 @@ class SessionManagerServicer(sm_pb2_grpc.SessionManagerServicer):
         status=1
         return status
 
+    def telemetry(self, request, context):
+        cpu_used = request.cpu_used
+        memory_used = request.memory_used
+        time_taken = request.time_taken
+        net_used = request.net_used
+        device_name=request.device_name
+        if device_name=="uclnlp":
+            pubk=UCLNLP_PUBK
+        if device_name=="athene":
+            pubk=ATHENE_PUBK
+        if device_name=="news_score":
+            pubk=NEWS_SCORE_PUBK
+        stat = {
+           "time_taken": time_taken,
+           "memory_usage": memory_used, # is not memory percentage
+           "net_rx": net_used,
+           "cpu_usage":cpu_used,  # is not cpu percentage
+          }
+        dm.updateProviderDeviceData(self.db,device_name, stat,pubk)
 
     @staticmethod
     def set_grpc_context(context, message_type, msg, code=None):

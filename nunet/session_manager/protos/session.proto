@@ -3,24 +3,13 @@ syntax = "proto3";
 package session_manager;
 import "google/protobuf/empty.proto";
 
-//container start stats message
-message StartStatsInput {
-    string container=1;
+//telemetry input message
+message TelemetryInput {
+    float cpu_used = 1;
+    float memory_used =2;
+    float net_used = 3;
+    float time_taken =4;
 }
-
-message StartStatsOutput {
-    int32 status=1;
-}
-
-//container stop stats message 
-message StopStatsInput {
-    string container=1;
-}
-
-message StopStatsOutput {
-    string status=1;
-}
-
 
 
 // Execution request message
@@ -116,6 +105,5 @@ service SessionManager {
     rpc processInfo(ProcessInfoInput) returns(ProcessInfoOutput){}
     rpc provider (google.protobuf.Empty) returns (ProviderOutput){}
     rpc providerDevice (ProviderDeviceInput) returns (ProviderDeviceOutput) {}
-    rpc StartStats(StartStatsInput) returns (StartStatsOutput) {}
-    rpc StopStats(StopStatsInput) returns (StopStatsOutput) {}
+    rpc telemetry(TelemetryInput) returns (google.protobuf.Empty) {}
 }   

@@ -9,21 +9,17 @@ class Session:
 
     def __init__(self):
         self.stub = sm.get_stub()
-        self.container = "uclnlp"
-        self.img=["artifacts/image1/img1.jpg","artifacts/image1/img2.jpg","artifacts/image1/img3.jpg","artifacts/image1/img4.jpg","artifacts/image1/img5.jpg","artifacts/image1/img6.jpg","artifacts/image1/img7.jpg","artifacts/image1/img8.jpg","artifacts/image1/img9.jpg","artifacts/image1/img10.jpg"]
+        self.device_name = "uclnlp"
+        self.cpu_used=1.0
+        self.memory_used=1.0
+        self.net_used=1.0
+        self.time_taken=1.0
 
-    def signup(self):
-        try:
-             sm.signup(self.stub, self.email, self.password)
-        except:
-             logging.info("You have already registered")
     
-    def uclnlp(self):
-        sm.StartStats(self.stub, self.container)
+    def telemetry(self):
+        sm.telemetry(self.stub, self.cpu_used,self.memory_used,self.net_used,self.time_taken)
     
-    def stopuclnlp(self):
-        sm.StopStats(self.stub, self.container)
 
 if __name__ == '__main__':
    sess=Session()
-   sess.uclnlp()
+   sess.telemetry()

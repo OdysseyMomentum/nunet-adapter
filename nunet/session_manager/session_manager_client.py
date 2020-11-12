@@ -63,17 +63,11 @@ def providerDevice(stub, access_token , device_name):
 
 
 
-def StartStats(stub, container):
-        response = stub.StartStats(sm_pb2.StartStatsInput(container=container))
+def telemetry(stub, cpu_used,memory_used,net_used,time_taken):
+        response = stub.telemetry(sm_pb2.TelemetryInput(cpu_used=cpu_used,memory_used=memory_used,time_taken=time_taken))
 
-        print(response.status)
-        return response.status
 
-def StopStats(stub, container):
-        response = stub.StopStats(sm_pb2.StopStatsInput(container=container))
 
-        print(response.status)
-        return response.status
 
 def get_stub():
     try:

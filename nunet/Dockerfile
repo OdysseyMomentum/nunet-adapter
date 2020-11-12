@@ -55,6 +55,7 @@ RUN echo "listen_addresses='*'" >> /etc/postgresql/10/main/postgresql.conf
 # Expose the PostgreSQL port
 EXPOSE 5432
 
+
 USER root
 COPY . /nunet-demo
 RUN curl https://bootstrap.pypa.io/get-pip.py | python3.6
@@ -69,3 +70,6 @@ RUN ./install.sh
 WORKDIR /nunet-demo/session_manager
 RUN chmod +x start.sh 
 CMD ./start.sh
+
+RUN pip3 install setuptools
+RUN pip3 install web3
