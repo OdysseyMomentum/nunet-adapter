@@ -6,6 +6,7 @@ log = logging.getLogger("session_manager")
 import math
 from ntx import *
 
+ntx=ntx()
 NEWS_SCORE_PROVIDER_PRICE = 2
 ATHENE_PROVIDER_PRICE = 13
 UCLNLP_PROVIDER_PRICE = 2
@@ -81,8 +82,8 @@ def updateProviderDeviceData(db,device_name ,lg,pubk):
     ram_cost_per_process = memory_used * provider_device.ram_price
     net_cost_per_process = net_used * provider_device.net_price
     cost_per_process = math.ceil(cpu_cost_per_process + ram_cost_per_process + net_cost_per_process)
-    self.ntx.mine(cost_per_process)
-    self.ntx.transfer(cost_per_process,pubk)
+    ntx.mine(cost_per_process)
+    txn=ntx.transfer(cost_per_process,pubk)
     token_earned = provider_device.token_earned + cost_per_process
 
     db.update(ProviderDevice, where ={"device_name": device_name},
@@ -92,3 +93,4 @@ def updateProviderDeviceData(db,device_name ,lg,pubk):
                                          "up_time_used": up_time_used,
                                          "net_used": net_used,
                                          "process_completed": process_completed})
+    return txn

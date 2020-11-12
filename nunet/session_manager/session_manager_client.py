@@ -63,9 +63,9 @@ def providerDevice(stub, access_token , device_name):
 
 
 
-def telemetry(stub, cpu_used,memory_used,net_used,time_taken):
-        response = stub.telemetry(sm_pb2.TelemetryInput(cpu_used=cpu_used,memory_used=memory_used,time_taken=time_taken))
-
+def telemetry(stub, cpu_used,memory_used,net_used,time_taken,device_name):
+    response=stub.telemetry(sm_pb2.TelemetryInput(cpu_used=cpu_used,memory_used=memory_used,net_used=net_used,time_taken=time_taken,device_name=device_name))
+    return response
 
 
 

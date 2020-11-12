@@ -247,35 +247,7 @@ class SessionManagerServicer(sm_pb2_grpc.SessionManagerServicer):
 
                                       )
 
-    def StartStats(self, request, context):
-        container_name= request.container
-        time = datetime.datetime.now()
-        self.orc.read_stats=True
-        orc=self.orc.start_get_res(container_name)
 
-        for tag, lg ,itm in orc:
-            log.info("Registering new subprocess:")
-            log.info(lg)
-            if tag==Tag.UCLNLP_STAT:
-                print(lg)
-                dm.updateProviderDeviceData(self.db,Tag.UCLNLP_PROVIDER, lg)
-
-            if tag==Tag.ATHENE_STAT:
-                print(lg)
-                dm.updateProviderDeviceData(self.db,Tag.UCLNLP_PROVIDER, lg)
-
-            if tag==Tag.UCLNLP_STAT:
-                print(lg)
-                dm.updateProviderDeviceData(self.db,Tag.UCLNLP_PROVIDER, lg)
-
-    def StopStats(self, request, context):
-        self.orc.read_stats=False
-        container_name = request.container
-        time = datetime.datetime.now()
-
-        orc=self.orc.stop_get_res(container_name)
-        status=1
-        return status
 
     def telemetry(self, request, context):
         cpu_used = request.cpu_used
@@ -284,19 +256,20 @@ class SessionManagerServicer(sm_pb2_grpc.SessionManagerServicer):
         net_used = request.net_used
         device_name=request.device_name
         if device_name=="uclnlp":
-            pubk=UCLNLP_PUBK
+            pubk=Tag.UCLNLP_PUBK
         if device_name=="athene":
-            pubk=ATHENE_PUBK
+            pubk=Tag.ATHENE_PUBK
         if device_name=="news_score":
-            pubk=NEWS_SCORE_PUBK
+            pubk=Tag.NEWS_SCORE_PUBK
         stat = {
            "time_taken": time_taken,
-           "memory_usage": memory_used, # is not memory percentage
+           "total_memory": memory_used, # is not memory percentage
            "net_rx": net_used,
-           "cpu_usage":cpu_used,  # is not cpu percentage
+           "cpu_usage":cpu_used# is not cpu percentage
           }
-        dm.updateProviderDeviceData(self.db,device_name, stat,pubk)
-
+        txn=dm.updateProviderDeviceData(self.db,device_name, stat,pubk)
+        
+        return sm_pb2.TelemetryOutput(txn=str(txn))
     @staticmethod
     def set_grpc_context(context, message_type, msg, code=None):
         log.warning(msg)

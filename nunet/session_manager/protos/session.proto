@@ -9,8 +9,12 @@ message TelemetryInput {
     float memory_used =2;
     float net_used = 3;
     float time_taken =4;
+    string device_name=5;
 }
 
+message TelemetryOutput {
+    string txn = 1;
+}
 
 // Execution request message
 message ExecutionInput {
@@ -105,5 +109,5 @@ service SessionManager {
     rpc processInfo(ProcessInfoInput) returns(ProcessInfoOutput){}
     rpc provider (google.protobuf.Empty) returns (ProviderOutput){}
     rpc providerDevice (ProviderDeviceInput) returns (ProviderDeviceOutput) {}
-    rpc telemetry(TelemetryInput) returns (google.protobuf.Empty) {}
+    rpc telemetry(TelemetryInput) returns (TelemetryOutput) {}
 }   

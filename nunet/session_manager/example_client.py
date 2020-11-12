@@ -17,8 +17,8 @@ class Session:
 
     
     def telemetry(self):
-        sm.telemetry(self.stub, self.cpu_used,self.memory_used,self.net_used,self.time_taken)
-    
+        response=sm.telemetry(self.stub, self.cpu_used,self.memory_used,self.net_used,self.time_taken,self.device_name)
+        print(response)
 
 if __name__ == '__main__':
    sess=Session()
