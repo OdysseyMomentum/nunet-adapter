@@ -37,6 +37,7 @@ def addTask(db,  cred , lg,order):
     yolo_execution_id = addExecution(db, lg, order , task.task_id)
     return yolo_execution_id  , task.task_id
 
+
 def addExecution( db,  result , order, task_id ):
     time = datetime.datetime.now()
     if db.add(Execution, subprocess_id = order, result= result, date = time):
@@ -94,3 +95,22 @@ def updateProviderDeviceData(db,device_name ,lg,pubk):
                                          "net_used": net_used,
                                          "process_completed": process_completed})
     return txn
+
+def newExecution( db, order,lg,device_name):
+    provider_device = db.query(ProviderDevice, device_name=device_name)
+    cpu_used = lg.get("cpu_usage")
+    memory_used = lg.get("total_memory")
+    time_taken = lg.get("time_taken")
+    net_used = lg.get("net_rx")
+    cpu_cost_per_process = cpu_used * provider_device.cpu_price
+    ram_cost_per_process = memory_used * provider_device.ram_price
+    net_cost_per_process = net_used * provider_device.net_price
+    cost_per_process = math.ceil(cpu_cost_per_process + ram_cost_per_process + net_cost_per_process)    
+    time = datetime.datetime.now()
+    result="Dog"
+    if db.add(Execution, subprocess_id = order, result= result, date = time,cpu_usage=cpu_used,memory_usage=memory_used,time_taken=time_taken):
+        log.info("add new execution of user ")
+    else:
+        log.error("Error adding new execution ")
+    execution = db.query(Execution, subprocess_id=order, date=time)
+    return execution.execution_id

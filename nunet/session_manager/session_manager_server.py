@@ -65,6 +65,9 @@ class Tag:
     ATHENE_PUBK="0xb5114121A51c6FfA04dBC73F26eDb7B6bfE2eB35"
     NEWS_SCORE_PUBK="0xb5114121A51c6FfA04dBC73F26eDb7B6bfE2eB35"
 
+    UCLNLP_SUB_ID=0
+    ATHENE_SUB_ID=1
+    NEWS_SCORE_SUB_ID=2    
 
 class SessionManagerServicer(sm_pb2_grpc.SessionManagerServicer):
 
@@ -257,19 +260,23 @@ class SessionManagerServicer(sm_pb2_grpc.SessionManagerServicer):
         device_name=request.device_name
         if device_name=="uclnlp":
             pubk=Tag.UCLNLP_PUBK
+            order=Tag.UCLNLP_SUB_ID
         if device_name=="athene":
             pubk=Tag.ATHENE_PUBK
+            order=Tag.UCLNLP_SUB_ID
         if device_name=="news_score":
             pubk=Tag.NEWS_SCORE_PUBK
+            order=Tag.NEWS_SCORE_SUB_ID
         stat = {
            "time_taken": time_taken,
            "total_memory": memory_used, # is not memory percentage
            "net_rx": net_used,
            "cpu_usage":cpu_used# is not cpu percentage
           }
-        txn=dm.updateProviderDeviceData(self.db,device_name, stat,pubk)
-        
+        dm.newExecution(self.db, order,stat,device_name)
+        txn=dm.updateProviderDeviceData(self.db,device_name, stat,pubk)        
         return sm_pb2.TelemetryOutput(txn=str(txn))
+
     @staticmethod
     def set_grpc_context(context, message_type, msg, code=None):
         log.warning(msg)
