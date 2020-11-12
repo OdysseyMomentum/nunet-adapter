@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+    local_nunet:
+        build:
+            context: ./nunet
+            args:
+                container_name: "local_nunet"
+                max_load_local: ${max_load_local}
+        ports:
+            - "5001:50000"
+        container_name: local_nunet
+        image: local_nunet
+        volumes:
+            - /nunet/local/etc/postgresql:/etc/postgresql
+            - /nunet/local/var/log/postgresql:/var/log/postgresql
+            - /nunet/local/var/lib/postgresql:/var/lib/postgresql
+            - /var/run/docker.sock:/var/run/docker.sock
+            - /imdata:/nunet-demo/session_manager/imdata
+            - /log:/nunet-demo/session_manager/log
+

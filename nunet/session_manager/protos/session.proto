@@ -1,0 +1,121 @@
+syntax = "proto3";
+
+package session_manager;
+import "google/protobuf/empty.proto";
+
+//container start stats message
+message StartStatsInput {
+    string container=1;
+}
+
+message StartStatsOutput {
+    int32 status=1;
+}
+
+//container stop stats message 
+message StopStatsInput {
+    string container=1;
+}
+
+message StopStatsOutput {
+    string status=1;
+}
+
+
+
+// Execution request message
+message ExecutionInput {
+    string base64 = 1;
+}
+
+// Execution response
+
+message ExecutionOutput {
+    string log_info = 1;
+    string tag = 2;
+}
+
+// ProcessInfo request message
+message ProcessInfoInput {
+    int32 task_id = 1;
+    string share_token = 2;
+}
+
+// ProcessInfo response
+message ProcessInfoOutput {
+    string result = 1;
+    float token_spent = 2;
+    float token_reward = 3;
+    float time_taken = 4;
+    float memory_usage = 5;
+    float network_tx= 6;
+    float network_rx = 7;
+    float cpu_usage =  8;
+    string image_output = 9;
+    string json_result=10;
+    int32 task_id = 11;
+    string share_token = 12; 
+    float total_memory=13;
+}
+
+
+
+// Page  request message
+message PageInput {
+    int32 offset = 1;
+    int32 size = 2;
+}
+
+
+
+message Tasks {
+     string base64 = 1;
+     string result = 2;
+     int64 seconds = 3;
+     int32 task_id = 4;
+     int32 index = 5;
+}
+
+// provider response message
+message ProviderOutput {
+    repeated Device device = 1;
+}
+
+message Device {
+     string device_name = 1;
+     int64 process_completed = 2;
+     float token_earned = 3;
+  }
+
+// providerDevice request message
+message ProviderDeviceInput {
+    string device_name = 1;
+}
+
+// providerDevice response message
+message ProviderDeviceOutput {
+      float cpu_limit = 1;
+      float cpu_used = 2;
+      float memory_limit = 3;
+      float memory_used =4;
+      float net_limit = 5;
+      float net_used = 6;
+      float max_up_time = 7;
+      float used_up_time =8;
+      float cpu_price = 9;
+      float ram_price = 10;
+      float net_price = 11;
+  }
+
+
+
+
+// Service definitions
+service SessionManager {
+    rpc execute(ExecutionInput) returns (stream ExecutionOutput) {}
+    rpc processInfo(ProcessInfoInput) returns(ProcessInfoOutput){}
+    rpc provider (google.protobuf.Empty) returns (ProviderOutput){}
+    rpc providerDevice (ProviderDeviceInput) returns (ProviderDeviceOutput) {}
+    rpc StartStats(StartStatsInput) returns (StartStatsOutput) {}
+    rpc StopStats(StopStatsInput) returns (StopStatsOutput) {}
+}   

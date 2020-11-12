@@ -1,0 +1,40 @@
+{
+    "users": [
+        {
+            "email": "test@test.com",
+            "password": "test"
+        }
+    ],
+    "providerdevice": [
+        {
+            "device_name": "Device 1",
+            "cpu_limit" : 50.0,
+            "memory_limit": 4000.0,
+            "net_limit": 1000.0,
+            "up_time_limit" : 95.0,
+            "cpu_price": 0.1,
+            "ram_price": 0.001,
+            "net_price":0.1
+        },
+        {
+            "device_name": "Device 2",
+            "cpu_limit" : 50.0,
+            "memory_limit": 4000.0,
+            "net_limit": 1000.0,
+            "up_time_limit" : 95.0,
+            "cpu_price": 0.5,
+            "ram_price": 0.001,
+            "net_price":0.1
+        },
+        {
+                "device_name": "Device 3",
+                "cpu_limit" : 50.0,
+                "memory_limit": 4000.0,
+                "net_limit": 1000.0,
+                "up_time_limit" : 95.0,
+                "cpu_price": 0.5,
+                "ram_price": 0.001,
+                "net_price":0.1
+            }
+    ]
+}
